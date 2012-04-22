@@ -832,7 +832,7 @@ class PHP_CodeSniffer
 
                 $path = $parts[0].'/Sniffs/'.$parts[1].'/'.$parts[2].'Sniff.php';
                 $path = realpath(dirname(__FILE__).'/CodeSniffer/Standards').DIRECTORY_SEPARATOR.$path;
-                if ($path === false && self::$standardDir !== '') {
+                if (!is_file($path) && self::$standardDir !== '') {
                     // The sniff is not locally installed, so check if it is being
                     // referenced as a remote sniff outside the install. We do this by
                     // looking directly in the passed standard dir to see if it is
