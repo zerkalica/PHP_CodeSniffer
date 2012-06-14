@@ -30,7 +30,7 @@ if (class_exists('PEAR_Sniffs_Functions_FunctionDeclarationSniff', true) === fal
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class Squiz_Sniffs_Functions_MultiLineFunctionDeclarationSniff extends PEAR_Sniffs_Functions_FunctionDeclarationSniff
+class Symfony2_Sniffs_Functions_MultiLineFunctionDeclarationSniff extends Symfony2_Sniffs_Functions_FunctionDeclarationSniff
 {
     /**
      * Processes mutli-line declarations.
