@@ -25,7 +25,7 @@
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class PEAR_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffer_Sniff
+class Symfony2_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffer_Sniff
 {
 
 
@@ -128,7 +128,7 @@ class PEAR_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffer_
                 if ($tokens[$i]['line'] === $tokens[$closeBracket]['line']) {
                     // Closing brace needs to be indented to the same level
                     // as the function.
-                    $expectedIndent = $functionIndent;
+                    $expectedIndent = $functionIndent + 4;
                 } else {
                     $expectedIndent = ($functionIndent + 4);
                 }
@@ -141,7 +141,7 @@ class PEAR_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffer_
                 }
 
                 if ($expectedIndent !== $foundIndent) {
-                    $error = 'xMulti-line function declaration not indented correctly; expected %s spaces but found %s';
+                    $error = 'Multi-line function declaration not indented correctly; expected %s spaces but found %s';
                     $data  = array(
                               $expectedIndent,
                               $foundIndent,
