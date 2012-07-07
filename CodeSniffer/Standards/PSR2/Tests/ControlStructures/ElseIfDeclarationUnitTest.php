@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit test class for the ValidVariableName sniff.
+ * Unit test class for the ElseIfDeclaration sniff.
  *
  * PHP version 5
  *
@@ -13,7 +13,7 @@
  */
 
 /**
- * Unit test class for the ValidVariableName sniff.
+ * Unit test class for the ElseIfDeclaration sniff.
  *
  * A sniff unit test checks a .inc file for expected violations of a single
  * coding standard. Expected errors and warnings are stored in this class.
@@ -26,7 +26,7 @@
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class PEAR_Tests_NamingConventions_ValidVariableNameUnitTest extends AbstractSniffUnitTest
+class PSR2_Tests_ControlStructures_ElseIfDeclarationUnitTest extends AbstractSniffUnitTest
 {
 
 
@@ -40,14 +40,7 @@ class PEAR_Tests_NamingConventions_ValidVariableNameUnitTest extends AbstractSni
      */
     public function getErrorList()
     {
-        return array(
-                12 => 1,
-                17 => 1,
-                22 => 1,
-                92 => 1,
-                93 => 1,
-                94 => 1,
-               );
+        return array();
 
     }//end getErrorList()
 
@@ -62,7 +55,10 @@ class PEAR_Tests_NamingConventions_ValidVariableNameUnitTest extends AbstractSni
      */
     public function getWarningList()
     {
-        return array();
+        return array(
+                4  => 1,
+                12 => 1,
+               );
 
     }//end getWarningList()
 

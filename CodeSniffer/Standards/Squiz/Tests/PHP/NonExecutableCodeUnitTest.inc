@@ -3,7 +3,7 @@ switch ($var) {
     case '1':
         return;
         echo 'hi';
-    break;
+
     case '2':
     case '3':
         if ($something === true) {
@@ -18,7 +18,7 @@ switch ($var) {
             break;
             echo 'hi';
         }
-    break;
+
 }
 
 function myFunction($var)
@@ -107,6 +107,11 @@ function myFunction()
     );
 
 }//end myFunction()
+
+public static function thisCausesAnError() {
+return new foo(function() {return $foo;}
+);
+}
 
 function myFunction()
 {

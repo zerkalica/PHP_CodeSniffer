@@ -612,7 +612,7 @@ class PHP_CodeSniffer
 
             $standard = (string) $ruleset['name'];
         } else {
-            self::$standardDir = realpath(dirname(__FILE__).'/CodeSniffer/Standards').DIRECTORY_SEPARATOR.$standard;
+            self::$standardDir = realpath(dirname(__FILE__).'/CodeSniffer/Standards/'.$standard);
             if (is_dir(self::$standardDir) === false) {
                 // This isn't looking good. Let's see if this
                 // is a relative path to a custom standard.
@@ -767,7 +767,7 @@ class PHP_CodeSniffer
             if (in_array($sniff, $excludedSniffs) === true) {
                 continue;
             } else {
-                $files[] = $sniff;
+                $files[] = realpath($sniff);
             }
         }
 
@@ -819,7 +819,7 @@ class PHP_CodeSniffer
             $sniff = basename($path);
         } else if (is_file($sniff) === false) {
             // See if this is a whole standard being referenced.
-            $path = realpath(dirname(__FILE__).'/CodeSniffer/Standards').DIRECTORY_SEPARATOR.$sniff;
+            $path = realpath(dirname(__FILE__).'/CodeSniffer/Standards/'.$sniff);
             if (is_dir($path) === true) {
                 $isDir = true;
             } else {
@@ -1139,6 +1139,13 @@ class PHP_CodeSniffer
                              '*'   => '.*',
                             );
 
+            // We assume a / directory seperator, as do the exclude rules
+            // most developers write, so we need a special case for any system
+            // that is different.
+            if (DIRECTORY_SEPARATOR === '\\') {
+                $replacements['/'] = '\\\\';
+            }
+
             $pattern = strtr($pattern, $replacements);
             if (preg_match("|{$pattern}|i", $path) === 1) {
                 return true;
@@ -1211,7 +1218,9 @@ class PHP_CodeSniffer
             } else if (is_numeric($filename) === true) {
                 // See if we can find the PHP_CodeSniffer_File object.
                 foreach ($trace as $data) {
-                    if (isset($data['args'][0]) === true && ($data['args'][0] instanceof PHP_CodeSniffer_File) === true) {
+                    if (isset($data['args'][0]) === true
+                        && ($data['args'][0] instanceof PHP_CodeSniffer_File) === true
+                    ) {
                         $filename = $data['args'][0]->getFilename();
                     }
                 }

@@ -73,22 +73,18 @@
 
  <!-- 4.1. Extends and Implements -->
 
- <!-- The extends and implements keywords MUST be declared on the same line as the class name. -->
-
- <!-- The opening brace for the class go MUST go on its own line; the closing brace for the class MUST go on the next line after the body. -->
-
- <!-- Lists of implements MAY be split across multiple lines, where each subsequent line is indented once. When doing so, the first item in the list MUST be on the next line, and there MUST be only one interface per line. -->
+ <!-- The extends and implements keywords MUST be declared on the same line as the class name.
+      The opening brace for the class go MUST go on its own line; the closing brace for the class MUST go on the next line after the body.
+      Lists of implements MAY be split across multiple lines, where each subsequent line is indented once. When doing so, the first item in the list MUST be on the next line, and there MUST be only one interface per line. -->
+ <!-- checked in Classes/ClassDeclarationSniff -->
 
  <!-- 4.2. Properties -->
 
- <!-- Visibility MUST be declared on all properties. -->
- <rule ref="Squiz.Scope.MemberVarScope"/>
-
- <!-- The var keyword MUST NOT be used to declare a property. -->
-
- <!-- There MUST NOT be more than one property declared per statement. -->
-
- <!-- Property names SHOULD NOT be prefixed with a single underscore to indicate protected or private visibility. -->
+ <!-- Visibility MUST be declared on all properties.
+      The var keyword MUST NOT be used to declare a property.
+      There MUST NOT be more than one property declared per statement.
+      Property names SHOULD NOT be prefixed with a single underscore to indicate protected or private visibility. -->
+ <!-- checked in Classes/PropertyDeclarationSniff -->
 
  <!-- 4.3 Methods -->
 
@@ -150,10 +146,12 @@
  <!-- 5.1. if, elseif, else -->
 
  <!-- The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words. -->
+ <!-- checked in ControlStructures/ElseIfDeclarationSniff -->
 
  <!-- 5.2. switch, case -->
 
  <!-- The case statement MUST be indented once from switch, and the break keyword (or other terminating keyword) MUST be indented at the same level as the case body. There MUST be a comment such as // no break when fall-through is intentional in a non-empty case body. -->
+ <!-- checked in ControlStructures/SwitchDeclarationSniff -->
 
  <!-- 6. Closures -->
 

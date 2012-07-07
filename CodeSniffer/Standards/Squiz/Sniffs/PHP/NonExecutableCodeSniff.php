@@ -102,37 +102,38 @@ class Squiz_Sniffs_PHP_NonExecutableCodeSniff implements PHP_CodeSniffer_Sniff
             }
         }
 
-        if ($tokens[$stackPtr]['code'] === T_BREAK
-            && isset($tokens[$stackPtr]['scope_opener']) === true
-        ) {
-            // This break closes the scope of a CASE or DEFAULT statement
-            // so any code between this token and the next CASE, DEFAULT or
-            // end of SWITCH token will not be executable.
-            $next = $phpcsFile->findNext(
-                array(T_CASE, T_DEFAULT, T_CLOSE_CURLY_BRACKET),
-                ($stackPtr + 1)
-            );
+        if (isset($tokens[$stackPtr]['scope_opener']) === true) {
+            $owner = $tokens[$stackPtr]['scope_condition'];
+            if ($tokens[$owner]['code'] === T_CASE || $tokens[$owner]['code'] === T_DEFAULT) {
+                // This token closes the scope of a CASE or DEFAULT statement
+                // so any code between this token and the next CASE, DEFAULT or
+                // end of SWITCH token will not be executable.
+                $next = $phpcsFile->findNext(
+                    array(T_CASE, T_DEFAULT, T_CLOSE_CURLY_BRACKET),
+                    ($stackPtr + 1)
+                );
 
-            if ($next !== false) {
-                $lastLine = $tokens[($stackPtr + 1)]['line'];
-                for ($i = ($stackPtr + 1); $i < $next; $i++) {
-                    if (in_array($tokens[$i]['code'], PHP_CodeSniffer_Tokens::$emptyTokens) === true) {
-                        continue;
+                if ($next !== false) {
+                    $lastLine = $tokens[($stackPtr + 1)]['line'];
+                    for ($i = ($stackPtr + 1); $i < $next; $i++) {
+                        if (in_array($tokens[$i]['code'], PHP_CodeSniffer_Tokens::$emptyTokens) === true) {
+                            continue;
+                        }
+
+                        $line = $tokens[$i]['line'];
+                        if ($line > $lastLine) {
+                            $type    = substr($tokens[$stackPtr]['type'], 2);
+                            $warning = 'Code after %s statement cannot be executed';
+                            $data    = array($type);
+                            $phpcsFile->addWarning($warning, $i, 'Unreachable', $data);
+                            $lastLine = $line;
+                        }
                     }
+                }//end if
 
-                    $line = $tokens[$i]['line'];
-                    if ($line > $lastLine) {
-                        $type    = substr($tokens[$stackPtr]['type'], 2);
-                        $warning = 'Code after %s statement cannot be executed';
-                        $data    = array($type);
-                        $phpcsFile->addWarning($warning, $i, 'Unreachable', $data);
-                        $lastLine = $line;
-                    }
-                }
-            }//end if
-
-            // That's all we have to check for these types of BREAK statements.
-            return;
+                // That's all we have to check for these types of statements.
+                return;
+            }
         }//end if
 
         // This token may be part of an inline condition.
@@ -177,8 +178,6 @@ class Squiz_Sniffs_PHP_NonExecutableCodeSniff implements PHP_CodeSniffer_Sniff
                 }
             }//end for
 
-            $start = $phpcsFile->findNext(T_SEMICOLON, ($stackPtr + 1));
-
             if ($nextOpener === null) {
                 $end = $closer;
             } else {
@@ -191,9 +190,25 @@ class Squiz_Sniffs_PHP_NonExecutableCodeSniff implements PHP_CodeSniffer_Sniff
             }
 
             // Throw an error for all lines until the end of the file.
-            $start = $phpcsFile->findNext(T_SEMICOLON, ($stackPtr + 1));
-            $end   = ($phpcsFile->numTokens - 1);
+            $end = ($phpcsFile->numTokens - 1);
         }//end if
+
+        // Find the semicolon that ends this statement, skipping
+        // nested statements like FOR loops and closures.
+        for ($start = ($stackPtr + 1); $start < $phpcsFile->numTokens; $start++) {
+            if ($start === $end) {
+                break;
+            }
+
+            if ($tokens[$start]['code'] === T_OPEN_PARENTHESIS) {
+                $start = $tokens[$start]['parenthesis_closer'];
+                continue;
+            }
+
+            if ($tokens[$start]['code'] === T_SEMICOLON) {
+                break;
+            }
+        }
 
         $lastLine = $tokens[$start]['line'];
         for ($i = ($start + 1); $i < $end; $i++) {
