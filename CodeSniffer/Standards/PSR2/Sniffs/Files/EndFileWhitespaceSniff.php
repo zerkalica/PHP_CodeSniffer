@@ -62,14 +62,12 @@ class PSR2_Sniffs_Files_EndFileWhitespaceSniff implements PHP_CodeSniffer_Sniff
         $tokens   = $phpcsFile->getTokens();
         $stackPtr = ($phpcsFile->numTokens - 1);
 
-        // Go looking for the last non-empty line.
-        $lastLine = $tokens[$stackPtr]['line'];
+        $blankLines = 0;
         while ($tokens[$stackPtr]['code'] === T_WHITESPACE) {
             $stackPtr--;
+            $blankLines++;
         }
 
-        $lastCodeLine = $tokens[$stackPtr]['line'];
-        $blankLines   = $lastLine - $lastCodeLine;
         if ($blankLines === 0) {
             $error = 'Expected 1 blank line at end of file; 0 found';
             $data  = array($blankLines);
