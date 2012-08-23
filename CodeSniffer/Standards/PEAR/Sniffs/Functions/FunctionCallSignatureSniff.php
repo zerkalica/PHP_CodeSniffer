@@ -8,8 +8,8 @@
  * @package   PHP_CodeSniffer
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @copyright 2006-2011 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ * @copyright 2006-2012 Squiz Pty Ltd (ABN 77 084 670 600)
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -20,8 +20,8 @@
  * @package   PHP_CodeSniffer
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @copyright 2006-2011 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ * @copyright 2006-2012 Squiz Pty Ltd (ABN 77 084 670 600)
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
@@ -34,6 +34,13 @@ class PEAR_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSniffe
      * @var int
      */
     public $indent = 4;
+
+    /**
+     * If TRUE, multiple arguments can be defined per line in a multi-line call.
+     *
+     * @var bool
+     */
+    public $allowMultipleArguments = true;
 
 
     /**
@@ -209,11 +216,15 @@ class PEAR_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSniffe
                 // We changed lines, so this should be a whitespace indent token, but first make
                 // sure it isn't a blank line because we don't need to check indent unless there
                 // is actually some code to indent.
-                $nextCode = $phpcsFile->findNext(T_WHITESPACE, ($i + 1), ($closeBracket + 1), true);
-                if ($tokens[$nextCode]['line'] !== $lastLine) {
-                    $error = 'Empty lines are not allowed in multi-line function calls';
-                    $phpcsFile->addError($error, $i, 'EmptyLine');
-                    continue;
+                if ($tokens[$i]['code'] === T_WHITESPACE) {
+                    $nextCode = $phpcsFile->findNext(T_WHITESPACE, ($i + 1), ($closeBracket + 1), true);
+                    if ($tokens[$nextCode]['line'] !== $lastLine) {
+                        $error = 'Empty lines are not allowed in multi-line function calls';
+                        $phpcsFile->addError($error, $i, 'EmptyLine');
+                        continue;
+                    }
+                } else {
+                    $nextCode = $i;
                 }
 
                 // Check if the next line contains an object operator, if so rely on
@@ -251,6 +262,24 @@ class PEAR_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSniffe
                 $i        = $tokens[$i]['scope_closer'];
                 $lastLine = $tokens[$i]['line'];
                 continue;
+            }
+
+            // Skip the rest of a short array.
+            if ($tokens[$i]['code'] === T_OPEN_SHORT_ARRAY) {
+                $i        = $tokens[$i]['bracket_closer'];
+                $lastLine = $tokens[$i]['line'];
+                continue;
+            }
+
+            if ($this->allowMultipleArguments === false && $tokens[$i]['code'] === T_COMMA) {
+                // Comma has to be the last token on the line.
+                $next = $phpcsFile->findNext(T_WHITESPACE, ($i + 1), $closeBracket, true);
+                if ($next !== false
+                    && $tokens[$i]['line'] === $tokens[$next]['line']
+                ) {
+                    $error = 'Only one argument is allowed per line in a multi-line function call';
+                    $phpcsFile->addError($error, $next, 'MultipleArguments');
+                }
             }
         }//end for
 

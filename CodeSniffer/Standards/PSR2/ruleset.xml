@@ -19,7 +19,7 @@
  </rule>
 
  <!-- All PHP files MUST end with a single blank line. -->
- <!-- checked in Files/EndFileWhitesapceSniff -->
+ <!-- checked in Files/EndFileNewlineSniff -->
 
  <!-- The closing ?> tag MUST be omitted from files containing only PHP. -->
  <rule ref="Zend.Files.ClosingTag"/>
@@ -62,12 +62,12 @@
  <!-- 3. Namespace and Use Declarations -->
 
  <!-- When present, there MUST be one blank line after the namespace declaration. -->
+ <!-- checked in Namespaces/NamespaceDeclarationSniff -->
 
- <!-- When present, all use declarations MUST go after the namespace declaration. -->
-
- <!-- There MUST be one use keyword per declaration. -->
-
- <!-- There MUST be one blank line after the use block. -->
+ <!-- When present, all use declarations MUST go after the namespace declaration.
+      There MUST be one use keyword per declaration.
+      There MUST be one blank line after the use block. -->
+ <!-- checked in Namespaces/UseDeclarationSniff -->
 
  <!-- 4. Classes, Properties, and Methods -->
 
@@ -93,6 +93,7 @@
  <rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
 
  <!-- Method names SHOULD NOT be prefixed with a single underscore to indicate protected or private visibility. -->
+ <!-- checked in Methods/MethodDeclarationSniff -->
 
  <!-- Method names MUST NOT be declared with a space after the method name. The opening brace MUST go on its own line, and the closing brace MUST go on the next line following the body. There MUST NOT be a space after the opening parenthesis, and there MUST NOT be a space before the closing parenthesis. -->
  <rule ref="Squiz.Functions.FunctionDeclaration"/>
@@ -115,15 +116,20 @@
 
  <!-- 4.4. abstract, final, and static -->
 
- <!-- When present, the abstract and final declarations MUST precede the visibility declaration. -->
-
- <!-- When present, the static declaration MUST come after the visibility declaration. -->
+ <!-- When present, the abstract and final declarations MUST precede the visibility declaration.
+      When present, the static declaration MUST come after the visibility declaration. -->
+ <!-- checked in Methods/MethodDeclarationSniff -->
 
  <!-- 4.5 Method and Function Calls -->
 
- <!-- When making a method or function call, there MUST NOT be a space between the method or function name and the opening parenthesis, there MUST NOT be a space after the opening parenthesis, and there MUST NOT be a space before the closing parenthesis. In the argument list, there MUST NOT be a space before each comma, and there MUST be one space after each comma. -->
-
- <!-- Argument lists MAY be split across multiple lines, where each subsequent line is indented once. When doing so, the first item in the list MUST be on the next line, and there MUST be only one argument per line. -->
+ <!-- When making a method or function call, there MUST NOT be a space between the method or function name and the opening parenthesis, there MUST NOT be a space after the opening parenthesis, and there MUST NOT be a space before the closing parenthesis. In the argument list, there MUST NOT be a space before each comma, and there MUST be one space after each comma.
+ Argument lists MAY be split across multiple lines, where each subsequent line is indented once. When doing so, the first item in the list MUST be on the next line, and there MUST be only one argument per line. -->
+ <rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
+ <rule ref="PEAR.Functions.FunctionCallSignature">
+  <properties>
+   <property name="allowMultipleArguments" value="false"/>
+  </properties>
+ </rule>
 
  <!-- 5. Control Structures -->
 
@@ -155,13 +161,12 @@
 
  <!-- 6. Closures -->
 
- <!-- Closures MUST be declared with a space after the function keyword, and a space before and after the use keyword. -->
-
- <!-- The opening brace MUST go on the same line, and the closing brace MUST go on the next line following the body.
+ <!-- Closures MUST be declared with a space after the function keyword, and a space before and after the use keyword.
+ The opening brace MUST go on the same line, and the closing brace MUST go on the next line following the body.
  There MUST NOT be a space after the opening parenthesis of the argument list or variable list, and there MUST NOT be a space before the closing parenthesis of the argument list or variable list.
  In the argument list and variable list, there MUST NOT be a space before each comma, and there MUST be one space after each comma.
  Closure arguments with default values MUST go at the end of the argument list.
  Argument lists and variable lists MAY be split across multiple lines, where each subsequent line is indented once. When doing so, the first item in the list MUST be on the next line, and there MUST be only one argument or variable per line.
  When the ending list (whether or arguments or variables) is split across multiple lines, the closing parenthesis and opening brace MUST be placed together on their own line with one space between them. -->
- <!-- SAME AS FUNCTION RULES? -->
+ <!-- checked in Squiz.Functions.MultiLineFunctionDeclaration -->
 </ruleset>

@@ -1,31 +1,31 @@
 <?php
 /**
- * PSR2_Sniffs_Files_EndFileWhitespaceSniff.
+ * Generic_Sniffs_Files_EndFileNewlineSniff.
  *
  * PHP version 5
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
  * @author    Greg Sherwood <gsherwood@squiz.net>
- * @copyright 2006-2011 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ * @copyright 2006-2012 Squiz Pty Ltd (ABN 77 084 670 600)
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
 /**
- * PSR2_Sniffs_Files_EndFileWhitespaceSniff.
+ * Generic_Sniffs_Files_EndFileNewlineSniff.
  *
- * Checks that there is a single blank line at the end of PHP files.
+ * Ensures the file ends with a newline character.
  *
  * @category  PHP
  * @package   PHP_CodeSniffer
  * @author    Greg Sherwood <gsherwood@squiz.net>
- * @copyright 2006-2011 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ * @copyright 2006-2012 Squiz Pty Ltd (ABN 77 084 670 600)
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class PSR2_Sniffs_Files_EndFileWhitespaceSniff implements PHP_CodeSniffer_Sniff
+class PSR2_Sniffs_Files_EndFileNewlineSniff implements PHP_CodeSniffer_Sniff
 {
 
     /**
@@ -51,11 +51,16 @@ class PSR2_Sniffs_Files_EndFileWhitespaceSniff implements PHP_CodeSniffer_Sniff
      */
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
-        // We are only interested if this is the first open tag.
+        // We are only interested if this is the first open tag and in a file
+        // that only contains PHP code.
         if ($stackPtr !== 0) {
-            if ($phpcsFile->findPrevious(T_OPEN_TAG, ($stackPtr - 1)) !== false) {
+            if ($phpcsFile->findPrevious(array(T_OPEN_TAG, T_INLINE_HTML), ($stackPtr - 1)) !== false) {
                 return;
             }
+        }
+
+        if ($phpcsFile->findNext(T_INLINE_HTML, ($stackPtr + 1)) !== false) {
+            return;
         }
 
         // Skip to the end of the file.
@@ -77,6 +82,7 @@ class PSR2_Sniffs_Files_EndFileWhitespaceSniff implements PHP_CodeSniffer_Sniff
             $data  = array($blankLines);
             $phpcsFile->addError($error, $stackPtr, 'TooMany', $data);
         }
+
     }//end process()
 
 

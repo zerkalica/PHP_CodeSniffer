@@ -7,8 +7,8 @@
  * @category  PHP
  * @package   PHP_CodeSniffer
  * @author    Greg Sherwood <gsherwood@squiz.net>
- * @copyright 2006-2011 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ * @copyright 2006-2012 Squiz Pty Ltd (ABN 77 084 670 600)
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -22,8 +22,8 @@ if (class_exists('PHP_CodeSniffer_Standards_AbstractVariableSniff', true) === fa
  * @category  PHP
  * @package   PHP_CodeSniffer
  * @author    Greg Sherwood <gsherwood@squiz.net>
- * @copyright 2006-2011 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ * @copyright 2006-2012 Squiz Pty Ltd (ABN 77 084 670 600)
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
@@ -44,7 +44,7 @@ class PSR2_Sniffs_Classes_PropertyDeclarationSniff extends PHP_CodeSniffer_Stand
         $tokens = $phpcsFile->getTokens();
 
         if ($tokens[$stackPtr]['content'][1] === '_') {
-            $error = 'Property name "%s" SHOULD NOT be prefixed with an underscore to indicate visibility';
+            $error = 'Property name "%s" should not be prefixed with an underscore to indicate visibility';
             $data  = array($tokens[$stackPtr]['content']);
             $phpcsFile->addWarning($error, $stackPtr, 'Underscore', $data);
         }
@@ -60,19 +60,19 @@ class PSR2_Sniffs_Classes_PropertyDeclarationSniff extends PHP_CodeSniffer_Stand
         }
 
         if ($tokens[$prev]['code'] === T_VAR) {
-            $error = 'The var keyword MUST NOT be used to declare a property';
+            $error = 'The var keyword must not be used to declare a property';
             $phpcsFile->addError($error, $stackPtr, 'VarUsed');
         }
 
         $next = $phpcsFile->findNext(array(T_VARIABLE, T_SEMICOLON), ($stackPtr + 1));
         if ($tokens[$next]['code'] === T_VARIABLE) {
-            $error = 'There MUST NOT be more than one property declared per statement';
+            $error = 'There must not be more than one property declared per statement';
             $phpcsFile->addError($error, $stackPtr, 'Multiple');
         }
 
         $modifier = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$scopeModifiers, $stackPtr);
         if (($modifier === false) || ($tokens[$modifier]['line'] !== $tokens[$stackPtr]['line'])) {
-            $error = 'Visibility MUST be declared on property "%s"';
+            $error = 'Visibility must be declared on property "%s"';
             $data  = array($tokens[$stackPtr]['content']);
             $phpcsFile->addError($error, $stackPtr, 'ScopeMissing', $data);
         }

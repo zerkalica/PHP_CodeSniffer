@@ -8,8 +8,8 @@
  * @package   PHP_CodeSniffer
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @copyright 2006-2011 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ * @copyright 2006-2012 Squiz Pty Ltd (ABN 77 084 670 600)
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -19,8 +19,8 @@
  * @category  PHP
  * @package   PHP_CodeSniffer
  * @author    Greg Sherwood <gsherwood@squiz.net>
- * @copyright 2006-2011 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ * @copyright 2006-2012 Squiz Pty Ltd (ABN 77 084 670 600)
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
@@ -103,7 +103,10 @@ class PHP_CodeSniffer_Tokenizers_JS
                                           ),
                             T_CASE     => array(
                                            'start'  => array(T_COLON),
-                                           'end'    => array(T_BREAK),
+                                           'end'    => array(
+                                                        T_BREAK,
+                                                        T_RETURN,
+                                                       ),
                                            'strict' => true,
                                            'shared' => true,
                                            'with'   => array(
@@ -114,7 +117,10 @@ class PHP_CodeSniffer_Tokenizers_JS
                                           ),
                             T_DEFAULT  => array(
                                            'start'  => array(T_COLON),
-                                           'end'    => array(T_BREAK),
+                                           'end'    => array(
+                                                        T_BREAK,
+                                                        T_RETURN,
+                                                       ),
                                            'strict' => true,
                                            'shared' => true,
                                            'with'   => array(
