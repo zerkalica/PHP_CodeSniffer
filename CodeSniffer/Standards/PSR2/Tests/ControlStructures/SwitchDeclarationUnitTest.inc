@@ -32,4 +32,39 @@ case 2:
         echo 'Default case';
     break;
 }
+
+switch ($foo) {
+    case 'Foo': {
+        echo 'foo';
+        break;
+        }
+}
+
+while ($i < 10) {
+    switch ($foo) {
+        case '1':
+        case '2':
+            ++$i;
+            continue 2;
+        case '3':
+            return $i;
+    }
+}
+
+switch (true) {
+    case is_resource($value):
+        throw new Exception('foo');
+    case is_object($value):
+        return 'object';
+}
+
+switch (0) {
+    case 0:
+        switch (1) {
+            case 1:
+                echo 'a';
+                break;
+        }
+        break;
+}
 ?>

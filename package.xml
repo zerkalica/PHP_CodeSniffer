@@ -14,11 +14,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <email>gsherwood@squiz.net</email>
   <active>yes</active>
  </lead>
- <date>2012-08-08</date>
- <time>10:29:00</time>
+ <date>2012-09-26</date>
+ <time>14:13:00</time>
  <version>
-  <release>1.3.7</release>
-  <api>1.3.7</api>
+  <release>1.4.1</release>
+  <api>1.4.1</api>
  </version>
  <stability>
   <release>stable</release>
@@ -26,25 +26,31 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://matrix.squiz.net/developer/tools/php_cs/licence">BSD License</license>
  <notes>
-  - Added PSR1 and PSR2 coding standards that can be used to check your code against these guidelines
-  - PHP 5.4 short array syntax is now detected and tokens are assigned to the open and close characters
-    -- New tokens are T_OPEN_SHORT_ARRAY and T_CLOSE_SHORT_ARRAY as PHP does not define its own
-  - Added the ability to explain a coding standard by listing the sniffs that it includes
-    -- The sniff list includes all imported and native sniffs
-    -- Explain a standard by using the -e and --standard=[standard] command line arguments
-    -- E.g., phpcs -e --standard=Squiz
-    -- Thanks to Ben Selby for the idea
-  - Added report to show results using notify-send
-    -- Use --report=notifysend to generate the report
-    -- Thanks to Christian Weiske for the contribution
-  - The JS tokenizer now recognises RETURN as a valid closer for CASE and DEFAULT inside switch statements
-  - PEAR ValidFunctionNameSniff no longer enforces exact case matching for PHP magic methods
-  - Squiz SwitchDeclarationSniff now allows RETURN statements to close a CASE or DEFAULT statement
-  - Fixed a PHP notice generated when loading custom array settings from a rulset.xml file
-  - Fixed bug #17908 : CodeSniffer does not recognise optional @params
-    -- Thanks to Pete Walker for the patch
-  - Fixed bug #19538 : Function identation code sniffer checks inside short arrays
-  - Fixed bug #19565 : Non-Executable Code Sniff Broken for Case Statements with both return and break
+  - All ignore patterns have been reverted to being checked against the absolute path of a file
+    -- Patterns can be specified to be relative in a rulset.xml file, but nowhere else
+    -- e.g., [exclude-pattern type="relative"]^tests/*[/exclude-pattern] (with angle brackets, not square brackets)
+  - Sniffs inside PHP 5.3 namespaces are now supported, along with the existing underscore-style emulated namespaces
+    -- For example: namespace MyStandard\Sniffs\Arrays; class ArrayDeclarationSniff implements \PHP_CodeSniffer_Sniff { ...
+    -- Thanks to Till Klampaeckel for the patch
+  - Added Generic MixedLineEndingsSniff to ensure files do not use more than one type of EOL character
+  - Added Generic DisallowSpaceIndent to check that files are indented using tabs
+  - Added Generic OneClassPerFileSniff to check that only one class is defined in each file
+    -- Thanks to Andy Grunwald for the contribution
+  - Added Generic OneInterfacePerFileSniff to check that only one interface is defined in each file
+    -- Thanks to Andy Grunwald for the contribution
+  - Added Generic LowercasedFilenameSniff to check that filenames are lowercase
+    -- Thanks to Andy Grunwald for the contribution
+  - Added Generic ClosingPHPTagSniff to check that each open PHP tag has a corresponding close tag
+    -- Thanks to Andy Grunwald for the contribution
+  - Added Generic CharacterBeforePHPOpeningTagSniff to check that the open PHP tag is the first content in a file
+    -- Thanks to Andy Grunwald for the contribution
+  - Fixed incorrect errors in Squiz OperatorBracketSniff and OperatorSpacingSniff for negative numbers in CASE statements
+    -- Thanks to Arnout Boks for the patch
+  - Generic CamelCapsFunctionNameSniff no longer enforces exact case matching for PHP magic methods
+  - PEAR ValidFunctionNameSniff now supports traits
+  - PSR1 ClassDeclarationSniff no longer throws an error for non-namespaced code if PHP version is less than 5.3.0
+  - Fixed bug #19616 : Nested switches cause false error in PSR2
+  - Fixed bug #19629 : PSR2 error for inline comments on multi-line argument lists
  </notes>
  <contents>
   <dir name="/">
@@ -331,6 +337,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
         <file baseinstalldir="PHP" name="LineLengthSniff.php" role="php">
          <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
+        <file baseinstalldir="PHP" name="OneClassPerFileSniff.php" role="php">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="PHP" name="OneInterfacePerFileSniff.php" role="php">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
        </dir>
        <dir name="Formatting">
         <file baseinstalldir="PHP" name="DisallowMultipleStatementsSniff.php" role="php">
@@ -380,6 +392,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
         </file>
        </dir>
        <dir name="PHP">
+        <file baseinstalldir="PHP" name="CharacterBeforePHPOpeningTagSniff.php" role="php">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="PHP" name="ClosingPHPTagSniff.php" role="php">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
         <file baseinstalldir="PHP" name="DeprecatedFunctionsSniff.php" role="php">
          <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
@@ -410,6 +428,9 @@ http://pear.php.net/dtd/package-2.0.xsd">
         </file>
        </dir>
        <dir name="WhiteSpace">
+        <file baseinstalldir="PHP" name="DisallowSpaceIndentSniff.php" role="php">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
         <file baseinstalldir="PHP" name="DisallowTabIndentSniff.php" role="php">
          <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
@@ -503,6 +524,14 @@ http://pear.php.net/dtd/package-2.0.xsd">
         <file baseinstalldir="PHP" name="LineLengthUnitTest.php" role="test">
          <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
+        <file baseinstalldir="PHP" name="OneClassPerFileUnitTest.inc" role="test" />
+        <file baseinstalldir="PHP" name="OneClassPerFileUnitTest.php" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="PHP" name="OneInterfacePerFileUnitTest.inc" role="test" />
+        <file baseinstalldir="PHP" name="OneInterfacePerFileUnitTest.php" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
        </dir>
        <dir name="Formatting">
         <file baseinstalldir="PHP" name="DisallowMultipleStatementsUnitTest.inc" role="test" />
@@ -566,6 +595,14 @@ http://pear.php.net/dtd/package-2.0.xsd">
         </file>
        </dir>
        <dir name="PHP">
+        <file baseinstalldir="PHP" name="CharacterBeforePHPOpeningTagUnitTest.inc" role="test" />
+        <file baseinstalldir="PHP" name="CharacterBeforePHPOpeningTagUnitTest.php" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
+        <file baseinstalldir="PHP" name="ClosingPHPTagUnitTest.inc" role="test" />
+        <file baseinstalldir="PHP" name="ClosingPHPTagUnitTest.php" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
         <file baseinstalldir="PHP" name="DisallowShortOpenTagUnitTest.inc" role="test" />
         <file baseinstalldir="PHP" name="DisallowShortOpenTagUnitTest.php" role="test">
          <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -596,6 +633,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
         </file>
        </dir>
        <dir name="WhiteSpace">
+        <file baseinstalldir="PHP" name="DisallowSpaceIndentUnitTest.css" role="test" />
+        <file baseinstalldir="PHP" name="DisallowSpaceIndentUnitTest.inc" role="test" />
+        <file baseinstalldir="PHP" name="DisallowSpaceIndentUnitTest.js" role="test" />
+        <file baseinstalldir="PHP" name="DisallowSpaceIndentUnitTest.php" role="test">
+         <tasks:replace from="@package_version@" to="version" type="package-info" />
+        </file>
         <file baseinstalldir="PHP" name="DisallowTabIndentUnitTest.css" role="test" />
         <file baseinstalldir="PHP" name="DisallowTabIndentUnitTest.inc" role="test" />
         <file baseinstalldir="PHP" name="DisallowTabIndentUnitTest.js" role="test" />
@@ -2011,6 +2054,45 @@ http://pear.php.net/dtd/package-2.0.xsd">
   </filelist>
  </phprelease>
  <changelog>
+  <release>
+   <version>
+    <release>1.4.0</release>
+    <api>1.4.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-09-26</date>
+   <license uri="http://matrix.squiz.net/developer/tools/php_cs/licence">BSD License</license>
+   <notes>
+    - Added PSR1 and PSR2 coding standards that can be used to check your code against these guidelines
+    - PHP 5.4 short array syntax is now detected and tokens are assigned to the open and close characters
+      -- New tokens are T_OPEN_SHORT_ARRAY and T_CLOSE_SHORT_ARRAY as PHP does not define its own
+    - Added the ability to explain a coding standard by listing the sniffs that it includes
+      -- The sniff list includes all imported and native sniffs
+      -- Explain a standard by using the -e and --standard=[standard] command line arguments
+      -- E.g., phpcs -e --standard=Squiz
+      -- Thanks to Ben Selby for the idea
+    - Added report to show results using notify-send
+      -- Use --report=notifysend to generate the report
+      -- Thanks to Christian Weiske for the contribution
+    - The JS tokenizer now recognises RETURN as a valid closer for CASE and DEFAULT inside switch statements
+    - AbstractPatternSniff now sets the ignoreComments option using a public var rather than through the constructor
+      -- This allows the setting to be overwritten in ruleset.xml files
+      -- Old method remains for backwards compatibility
+    - Generic LowerCaseConstantSniff and UpperCaseConstantSniff no longer report errors on classes named True, False or Null
+    - PEAR ValidFunctionNameSniff no longer enforces exact case matching for PHP magic methods
+    - Squiz SwitchDeclarationSniff now allows RETURN statements to close a CASE or DEFAULT statement
+    - Squiz BlockCommentSniff now correctly reports an error for blank lines before blocks at the start of a control structure
+    - Fixed a PHP notice generated when loading custom array settings from a rulset.xml file
+    - Fixed bug #17908 : CodeSniffer does not recognise optional @params
+      -- Thanks to Pete Walker for the patch
+    - Fixed bug #19538 : Function indentation code sniffer checks inside short arrays
+    - Fixed bug #19565 : Non-Executable Code Sniff Broken for Case Statements with both return and break
+    - Fixed bug #19612 : Invalid @package suggestion
+   </notes>
+  </release>
   <release>
    <version>
     <release>1.3.6</release>

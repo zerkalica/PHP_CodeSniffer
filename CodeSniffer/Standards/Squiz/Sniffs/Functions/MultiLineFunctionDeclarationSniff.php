@@ -48,7 +48,7 @@ class Squiz_Sniffs_Functions_MultiLineFunctionDeclarationSniff extends PEAR_Snif
         // We do everything the parent sniff does, and a bit more.
         parent::processMultiLineDeclaration($phpcsFile, $stackPtr, $tokens);
 
-        $openBracket  = $tokens[$stackPtr]['parenthesis_opener'];
+        $openBracket = $tokens[$stackPtr]['parenthesis_opener'];
         $this->processBracket($phpcsFile, $openBracket, $tokens, 'function');
 
         if ($tokens[$stackPtr]['code'] !== T_CLOSURE) {
@@ -76,11 +76,13 @@ class Squiz_Sniffs_Functions_MultiLineFunctionDeclarationSniff extends PEAR_Snif
     /**
      * Processes the contents of a single set of brackets.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-     * @param int                  $stackPtr  The position of the open bracket
-     *                                        in the stack passed in $tokens.
-     * @param array                $tokens    The stack of tokens that make up
-     *                                        the file.
+     * @param PHP_CodeSniffer_File $phpcsFile   The file being scanned.
+     * @param int                  $openBracket The position of the open bracket
+     *                                          in the stack passed in $tokens.
+     * @param array                $tokens      The stack of tokens that make up
+     *                                          the file.
+     * @param string               $type        The type of the token the brackets
+     *                                          belong to (function or use).
      *
      * @return void
      */
